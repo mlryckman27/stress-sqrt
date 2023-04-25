@@ -12,6 +12,24 @@
 
 int main (int argc, char **argv) {
 
+	printf("num args: %d\n", argc);
+
+	// Allocate memory for number of arguments passed to the application
+	int* cpuArray = (int*) malloc((argc - 1) * sizeof(int));
+	for (int i = 1; i < argc; i++)
+		cpuArray[i] = atoi(argv[i]);
+
+	/**
+	 * START TEST 
+	*/
+	// Print out the arguments passed to the program, as a test
+	for (int i = 1; i < argc; i++)
+		printf("cpuArray[%d]: %d\n", i, cpuArray[i]);
+	
+	/**
+	 * END TEST
+	*/
+
 	// Seed random number generator
 	srand(time(NULL));
 
@@ -32,3 +50,10 @@ int main (int argc, char **argv) {
 
 	return 0;
 }
+
+
+/**
+ * TODO:
+ * 	- fork process for each CPU specified and run sqrt on each individual process
+ *  - from main process, allow user to send stop signal to each child process to stop the stress test
+*/
