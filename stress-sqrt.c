@@ -37,8 +37,10 @@ int main (int argc, char **argv) {
 	cpu_set_t set;
 	CPU_ZERO(&set);
 
-	// Set the CPU mask to use only CPU #0
-	int cpu = 0;
+	// set CPU to test
+	int cpu = cpuArray[1];
+	printf("%d\n", cpu);
+
 	CPU_SET(cpu, &set);
 
 	// Infinite loop over square root of random number
