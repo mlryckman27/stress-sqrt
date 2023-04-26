@@ -1,57 +1,39 @@
-#define _GNU_SOURCE
-
-
-#include <sched.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/wait.h>
-#include <time.h>
-#include <math.h>
+#include <sys/types.h>
 
 
-int main (int argc, char **argv) {
+int main(int argc, char** argv) {
 
-	printf("num args: %d\n", argc);
+    int* cpuList = (int*) malloc((argc - 1) * sizeof(int));
 
-	// Allocate memory for number of arguments passed to the application
-	int* cpuArray = (int*) malloc((argc - 1) * sizeof(int));
-	for (int i = 1; i < argc; i++)
-		cpuArray[i] = atoi(argv[i]);
+    for (int i = 0; i < argc - 1; i++)
+        cpuList[i] = atoi(argv[i + 1]);
 
-	/**
-	 * START TEST 
-	*/
-	// Print out the arguments passed to the program, as a test
-	for (int i = 1; i < argc; i++)
-		printf("cpuArray[%d]: %d\n", i, cpuArray[i]);
-	
-	/**
-	 * END TEST
-	*/
+    for (int i = 0; i < argc - 1; i++)
+        printf("cpuList[%d]: %d\n", i, cpuList[i]);
 
-	// Seed random number generator
-	srand(time(NULL));
+    char* cpu[] = {NULL, NULL};
+    scanf("%s", *cpu);
+    
+    while (1) {
 
-	// Setup CPU mask
-	cpu_set_t set;
-	CPU_ZERO(&set);
+        pid_t pid = fork();
 
-	// set CPU to test
-	int cpu = cpuArray[1];
-	printf("%d\n", cpu);
+        if (pid == 0) {
+            execv("./worker", cpu);
+        }
 
-	CPU_SET(cpu, &set);
+        // *cpu[0] = NULL;
+        // *cpu[1] = NULL;
+        scanf("%s", *cpu);
+    }
 
-	// Infinite loop over square root of random number
-	if (sched_setaffinity(0, sizeof(set), &set) == 0) {
-		while (1) {
-			sqrt(rand());
-		}
-	}
-
-	return 0;
+    return 0;
 }
+
+
 
 
 /**
